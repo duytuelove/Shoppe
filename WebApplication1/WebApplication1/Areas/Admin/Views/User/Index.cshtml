@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<Model.EF.tblUser>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layouts.cshtml";
+}
+
+@section header{
+    Danh sách người dùng
+}
+<div class="row">
+    <div class="col-md-6">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Bordered Table</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th style="width: 10px">#</th>
+                        <th>Tài khoản</th>
+                        <th>Họ tên</th>
+                        <th>Địa chỉ</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th style="width: 40px">Số điện thoại</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr id = "row_@item.ID">
+                            <td> <a href="../User/Edit/@item.ID">Sửa</a></td>
+                            <td> @Ajax.ActionLink("Xóa", "Delete", new { @id = item.ID }, new AjaxOptions {
+                                Confirm = "Bạn có muốn xóa bản ghi này",
+                                OnComplete = "$('#row_ " + @item.ID + "').remove()",
+                                HttpMethod = "Delete"
+
+                            })</td>
+                            <td>@item.UserName</td>
+                            <td>@item.Name</td>
+                            <td>@item.Address</td>
+                            <td>@item.Email</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Status</td>
+                        </tr>
+                    }
+                  
+                </table>
+                @Html.PagedListPager(Model, page => Url.Action("Index", new  { page }))
+            </div>
+        </div>
+    </div>
+</div>
